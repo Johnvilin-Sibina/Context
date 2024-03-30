@@ -1,16 +1,37 @@
-
 import { Link } from "react-router-dom";
-
+import { useContext, useState } from "react";
+import UserContext from "./UserContext";
 function ListHotel() {
+  const { userName, setUserName } = useContext(UserContext);
+
+  //State to maintain textbox value
+  const [newUser, setNewUser] = useState("");
+
   return (
     <div className="container">
+      <input
+        type="text"
+        onChange={(e) => {
+          setNewUser(e.target.value);
+        }}
+      />
+      <button
+        onClick={() => {
+          setUserName(newUser);
+        }}
+      >
+        Change
+      </button>
       <div className="row">
         <div className="d-flex justify-content-between">
           <h1>Hotel List</h1>
-          <Link to={"/portal/create-hotel"} className="btn btn-primary ">Create Hotel</Link>
+          <Link to={"/portal/create-hotel"} className="btn btn-primary ">
+            Create Hotel
+          </Link>
         </div>
       </div>
       <div className="row">
+        {userName}
         <table className="table table-striped">
           <thead>
             <tr>

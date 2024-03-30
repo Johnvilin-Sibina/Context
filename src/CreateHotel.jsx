@@ -1,5 +1,11 @@
 import { useFormik } from "formik";
+import {useContext} from "react";
+import UserContext from "./UserContext";
+
 function CreateHotel() {
+
+  const {userName, setUserName} = useContext(UserContext)
+
   const formik = useFormik({
     initialValues: {
       hotelName: "",
@@ -28,9 +34,11 @@ function CreateHotel() {
     },
   });
   return (
+   
     <div className="container">
       <div className="row">
         <h1>Create Hotel</h1>
+        {userName}
         <div className="col-lg-12">
           <form onSubmit={formik.handleSubmit}>
             <input
