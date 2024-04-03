@@ -1,18 +1,42 @@
 import { Link } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import UserContext from "./UserContext";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { setFood } from "./reducers/foodList-reducer";
+
 function ListHotel() {
-  const { userName, setUserName } = useContext(UserContext);
+  // const { userName, setUserName } = useContext(UserContext); //commented to do redux
 
   //State to maintain textbox value
-  const [newUser, setNewUser] = useState("");
+  // const [newUser, setNewUser] = useState("");   //commented to do redux
+
+  const dispatch = useDispatch();
+
+  const data = useSelector((state) => state.app);
+  let getData = async () => {
+    try {
+      const foodList = await axios.get(
+        "https://65fba50a14650eb2100a446c.mockapi.io/food"
+      );
+      dispatch(setFood(foodList.data));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (data.food.length == 0) {
+      getData();
+    }
+  }, []);
 
   return (
     <div className="container">
-      <input
+      {/* <input
         type="text"
         onChange={(e) => {
-          setNewUser(e.target.value);
+          setNewUser(e.target.value);       //commented to do redux
         }}
       />
       <button
@@ -21,7 +45,7 @@ function ListHotel() {
         }}
       >
         Change
-      </button>
+      </button> */}
       <div className="row">
         <div className="d-flex justify-content-between">
           <h1>Hotel List</h1>
@@ -31,7 +55,7 @@ function ListHotel() {
         </div>
       </div>
       <div className="row">
-        {userName}
+        {/* {userName} */} {/* commented to do redux*/}
         <table className="table table-striped">
           <thead>
             <tr>
@@ -42,20 +66,26 @@ function ListHotel() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-            </tr>
-            <tr>
+            {data.food.map((item, index) => {
+              return (
+                <>
+                  <tr key={index}>
+                    <th scope="row">1</th>
+                    <td>{item.name}</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                  </tr>
+                </>
+              );
+            })}
+            {/* <tr>
               <th scope="row">2</th>
               <td>Jacob</td>
               <td>Thornton</td>
               <td>@fat</td>
             </tr>
             <tr>
-              <th scope="row">3</th>
+              <th scope="row">3</th>                        commented for practicing redux
               <td colspan="2">Larry the Bird</td>
               <td>@twitter</td>
             </tr>
@@ -68,7 +98,7 @@ function ListHotel() {
               <th scope="row">3</th>
               <td colspan="2">Larry the Bird</td>
               <td>@twitter</td>
-            </tr>
+            </tr> */}
           </tbody>
         </table>
       </div>
